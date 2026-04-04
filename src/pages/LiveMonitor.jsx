@@ -124,15 +124,15 @@ export default function LiveMonitor() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <div>
           <h1 style={{ fontSize: 24, fontWeight: 700 }}>Live Disruption Monitor</h1>
           <p style={{ color: 'var(--text2)', fontSize: 14, marginTop: 4 }}>
             Parametric triggers update in real-time · Last updated {lastUpdated.toLocaleTimeString()}
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 10 }}>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <button className="btn btn-ghost btn-sm" onClick={resetSimulation}>Reset</button>
           <span className="badge badge-green">● Live</span>
         </div>
@@ -145,7 +145,7 @@ export default function LiveMonitor() {
           { label: 'AQI Index', value: conditions.aqi.value, warning: conditions.aqi.value >= 200, danger: conditions.aqi.value >= 300 },
           { label: 'Platform Status', value: conditions.platform.swiggy === 'down' ? 'Swiggy DOWN' : 'All Systems OK', warning: false, danger: conditions.platform.swiggy === 'down' },
         ].map(metric => (
-          <div key={metric.label} className="card-sm" style={{ borderColor: metric.danger ? 'var(--red)40' : metric.warning ? 'var(--yellow)40' : 'var(--border)' }}>
+          <div key={metric.label} className="card-sm" style={{ borderColor: metric.danger ? '#ef444440' : metric.warning ? '#eab30840' : 'var(--border)' }}>
             <div style={{ fontSize: 11, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>{metric.label}</div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 700, color: metric.danger ? 'var(--red)' : metric.warning ? 'var(--yellow)' : 'var(--text)' }}>
               {metric.value}
@@ -163,7 +163,7 @@ export default function LiveMonitor() {
 
             return (
               <div key={disruption.id} className="card" style={{
-                borderColor: severity === 'triggered' ? 'var(--red)50' : severity === 'warning' ? 'var(--yellow)40' : 'var(--border)',
+                borderColor: severity === 'triggered' ? '#ef444450' : severity === 'warning' ? '#eab30840' : 'var(--border)',
                 background: severity === 'triggered' ? 'rgba(239,68,68,0.06)' : severity === 'warning' ? 'rgba(234,179,8,0.05)' : 'var(--bg2)',
                 transition: 'all 0.4s',
               }}>
@@ -209,14 +209,14 @@ export default function LiveMonitor() {
           <h3 style={{ fontSize: 14, fontWeight: 600, color: 'var(--text2)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Auto-Claim Pipeline</h3>
 
           {autoClaimEvents.length === 0 ? (
-            <div className="card" style={{ textAlign: 'center', padding: 32 }}>
+            <div className="card" style={{ textAlign: 'center', padding: 40, border: '1px dashed var(--border2)' }}>
               <div style={{ fontSize: 32, marginBottom: 12 }}>⚡</div>
               <div style={{ fontSize: 14, color: 'var(--text2)' }}>No claims yet</div>
               <div style={{ fontSize: 12, color: 'var(--text3)', marginTop: 4 }}>Simulate a disruption to see the zero-touch claim pipeline in action</div>
             </div>
           ) : (
             autoClaimEvents.map(event => (
-              <div key={event.id} className="card animate-up" style={{ borderColor: event.status === 'approved' ? 'var(--green)40' : 'var(--accent)40' }}>
+              <div key={event.id} className="card animate-up" style={{ borderColor: event.status === 'approved' ? '#22c55e40' : '#f9731640' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span style={{ fontSize: 18 }}>{event.icon}</span>
@@ -233,7 +233,8 @@ export default function LiveMonitor() {
                   { label: 'Claim approved', done: event.status === 'approved' },
                   { label: `UPI payout ₹${event.payout}`, done: event.status === 'approved', highlight: true },
                 ].map((step, index) => (
-                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                  <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: index < 3 ? 0 : 8, position: 'relative', paddingBottom: index < 3 ? 12 : 0 }}>
+                    {index < 3 && <div style={{ position: 'absolute', left: 9, top: 22, width: 2, height: 10, background: step.done ? 'var(--green)' : 'var(--bg4)' }} />}
                     <div style={{
                       width: 20,
                       height: 20,

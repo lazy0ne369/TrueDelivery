@@ -6,7 +6,7 @@ export default function ClaimsPage({ worker }) {
   const totalPaid = MOCK_CLAIMS.reduce((sum, c) => sum + c.amount, 0);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div>
         <h1 style={{ fontSize: 24, fontWeight: 700 }}>Claims History</h1>
         <p style={{ color: 'var(--text2)', fontSize: 14, marginTop: 4 }}>All claims auto-triggered · Zero paperwork</p>
@@ -38,7 +38,7 @@ export default function ClaimsPage({ worker }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
               <div style={{ fontSize: 28, lineHeight: 1 }}>{claim.icon}</div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 3, flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3, flexWrap: 'wrap' }}>
                   <span style={{ fontWeight: 600, fontSize: 15 }}>{claim.type}</span>
                   <span className="badge badge-green">✓ Paid</span>
                   {claim.autoTriggered && <span className="badge badge-blue">⚡ Auto-triggered</span>}

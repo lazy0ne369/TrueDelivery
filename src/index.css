@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+/* Fonts loaded via <link> in index.html — no @import needed */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -32,7 +32,7 @@
   --shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
 
-html { font-size: 16px; }
+html { font-size: 16px; scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: var(--font-body);
@@ -48,6 +48,25 @@ button { font: inherit; }
 
 h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.2; }
 
+/* Page-level utilities */
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.page-subtitle {
+  color: var(--text2);
+  font-size: 14px;
+  margin-top: 4px;
+}
+.stat-label-sm {
+  font-size: 11px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg2); }
@@ -59,12 +78,20 @@ h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.2; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 20px;
+  transition: border-color 0.2s;
+}
+.card:hover {
+  border-color: var(--border2);
 }
 .card-sm {
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 14px 16px;
+  transition: border-color 0.2s;
+}
+.card-sm:hover {
+  border-color: var(--border2);
 }
 .badge {
   display: inline-flex;
@@ -237,12 +264,13 @@ label { font-size: 12px; color: var(--text2); font-weight: 500; letter-spacing: 
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 
-@media (max-width: 768px) {
-  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-}
+/* Breakpoints: desktop-first, larger breakpoints first to prevent override conflicts */
 @media (max-width: 1024px) {
   .grid-4 { grid-template-columns: 1fr 1fr; }
   .grid-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
 }
 @media (max-width: 960px) {
   .app-main {
@@ -298,14 +326,14 @@ label { font-size: 12px; color: var(--text2); font-weight: 500; letter-spacing: 
 
 /* Progress bar */
 .progress-track {
-  height: 4px;
+  height: 6px;
   background: var(--bg4);
-  border-radius: 2px;
+  border-radius: 3px;
   overflow: hidden;
 }
 .progress-fill {
   height: 100%;
-  border-radius: 2px;
+  border-radius: 3px;
   background: var(--accent);
   transition: width 0.5s ease;
 }
@@ -320,6 +348,6 @@ label { font-size: 12px; color: var(--text2); font-weight: 500; letter-spacing: 
   inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
   pointer-events: none;
-  z-index: 9999;
+  z-index: 0;
   opacity: 0.4;
 }

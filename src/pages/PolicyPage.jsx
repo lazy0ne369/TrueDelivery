@@ -9,14 +9,14 @@ export default function PolicyPage({ worker }) {
   const policyId = getPolicyId(worker);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       <div>
         <h1 style={{ fontSize: 24, fontWeight: 700 }}>My Policy</h1>
         <p style={{ color: 'var(--text2)', fontSize: 14, marginTop: 4 }}>Active weekly income protection</p>
       </div>
 
       <div className="card" style={{
-        borderColor: 'var(--accent)40',
+        borderColor: '#f9731640',
         background: 'linear-gradient(135deg, var(--bg2) 0%, rgba(249,115,22,0.06) 100%)',
         position: 'relative',
         overflow: 'hidden',
@@ -65,7 +65,7 @@ export default function PolicyPage({ worker }) {
 
       <div>
         <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 14 }}>What You're Covered For</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
           {DISRUPTIONS.map(d => (
             <div key={d.id} className="card-sm" style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
               <div style={{ fontSize: 22, lineHeight: 1, flexShrink: 0 }}>{d.icon}</div>
@@ -107,7 +107,7 @@ export default function PolicyPage({ worker }) {
         </div>
       </div>
 
-      <div className="card" style={{ borderColor: 'var(--redbg)', background: 'var(--redbg)' }}>
+      <div className="card" style={{ borderColor: '#ef444430', background: 'var(--redbg)' }}>
         <h3 style={{ fontSize: 14, fontWeight: 600, color: 'var(--red)', marginBottom: 10 }}>Not Covered</h3>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           {['Health & medical bills', 'Life insurance', 'Vehicle repairs', 'Accident damages', 'Personal injury'].map(item => (

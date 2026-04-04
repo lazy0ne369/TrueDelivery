@@ -2,8 +2,9 @@
 
 <img src="https://img.shields.io/badge/TrueDelivery-Income%20Protection-f97316?style=for-the-badge&logo=shield&logoColor=white" alt="TrueDelivery"/>
 
-# [Truedelivery](https://true-delivery.vercel.app/)
-### *Your Earnings, Truly Protected.*
+# [TrueDelivery](https://true-delivery.vercel.app/)
+
+#### *Your Earnings, Truly Protected.*
 
 > **AI-powered parametric income insurance for India's food delivery workforce.**
 > When a verified disruption hits your zone — heavy rain, AQI spike, curfew, platform outage — your lost income is returned to your UPI automatically. No forms. No calls. No waiting.
@@ -17,20 +18,20 @@
 
 <br/>
 
-[Problem](#-problem-statement) · [How It Works](#-how-truedelivery-works) · [Triggers](#-parametric-triggers) · [Features](#-features) · [AI/ML](#-aiml-architecture) · [Fraud Defense](#-adversarial-defense) · [Tech Stack](#-tech-stack) · [Roadmap](#-development-roadmap)
+[Problem](#-the-problem) · [How It Works](#-how-truedelivery-works) · [Triggers](#%EF%B8%8F-parametric-triggers) · [Features](#-features) · [AI/ML](#-aiml-architecture) · [Fraud Defense](#%EF%B8%8F-adversarial-defense--anti-spoofing) · [Tech Stack](#-tech-stack) · [Roadmap](#%EF%B8%8F-development-roadmap)
 
 </div>
 
 ---
 
-## The Problem with Being a Delivery Partner in India
+## 🚨 The Problem
 
 India's **5+ million food delivery partners** on Zomato and Swiggy operate with zero safety net. No fixed salary. No paid leave. No insurance. Every rupee they earn depends entirely on being able to ride.
 
-When external disruptions strike, they can't:
+When external disruptions strike, they face devastating income loss:
 
 | Disruption | What Happens | Monthly Impact |
-|---|---|---|
+|:---|:---|:---|
 | 🌧️ Heavy rain / floods | Roads flooded, orders suspended | ₹1,500–3,000 lost |
 | 🌡️ Extreme heat waves | Outdoor work becomes unsafe | ₹800–1,500 lost |
 | 🌫️ Severe AQI spike | Government advisory, platforms halt | ₹600–1,200 lost |
@@ -47,18 +48,18 @@ These events cause delivery partners to lose **20–30% of their monthly earning
 
 ## 📖 Table of Contents
 
-1. [Problem Statement](#the-problem-with-being-a-delivery-partner-in-india)
+1. [The Problem](#-the-problem)
 2. [Real-World Scenarios](#-real-world-scenarios)
 3. [How TrueDelivery Works](#-how-truedelivery-works)
 4. [Payment Models](#-payment-models)
 5. [Application Workflow](#-application-workflow)
 6. [Weekly Premium Model](#-weekly-premium-model)
-7. [Parametric Triggers](#-parametric-triggers)
+7. [Parametric Triggers](#%EF%B8%8F-parametric-triggers)
 8. [Features](#-features)
 9. [AI/ML Architecture](#-aiml-architecture)
-10. [Adversarial Defense & Anti-Spoofing](#-adversarial-defense--anti-spoofing)
+10. [Adversarial Defense & Anti-Spoofing](#%EF%B8%8F-adversarial-defense--anti-spoofing)
 11. [Tech Stack](#-tech-stack)
-12. [Development Roadmap](#-development-roadmap)
+12. [Development Roadmap](#%EF%B8%8F-development-roadmap)
 13. [Target Market](#-target-market)
 14. [Team](#-team)
 
@@ -69,47 +70,43 @@ These events cause delivery partners to lose **20–30% of their monthly earning
 ### Persona: The Food Delivery Partner
 
 | Attribute | Details |
-|---|---|
-| Platforms | Zomato and / or Swiggy |
-| Weekly earnings | ₹3,500 – ₹7,000 depending on city and hours |
+|:---|:---|
+| Platforms | Zomato and/or Swiggy |
+| Weekly earnings | ₹3,500–₹7,000 depending on city and hours |
 | Daily hours | 8–12 hrs/day, 6–7 days/week |
 | Geography | Urban and semi-urban zones across India |
 | Current safety net | None |
 
----
-
 ### Scenario 1 — The Monsoon Blackout 🌧️
+
 **Ravi · Swiggy Partner · Bengaluru**
 
 A red alert is issued across Bengaluru. Roads flood. Swiggy suspends order assignments. Ravi cannot work for 5 hours.
 
 | | Without TrueDelivery | With TrueDelivery |
-|---|---|---|
+|:---|:---|:---|
 | Financial impact | ₹375 lost permanently | ₹375 returned to UPI — automatically |
 | Effort required | None (still loses money) | Zero |
 | Time to payout | Never | Under 3 minutes |
 
----
-
 ### Scenario 2 — The Curfew Strike 🚫
+
 **Meena · Zomato Partner · Delhi**
 
 A sudden bandh is called across East Delhi. Movement is restricted for 6 hours. Order volume in Meena's zone drops 90%.
 
 **Result:** Govt alert API detects the bandh. Order volume drop confirmed. Claim auto-triggered. ₹480 paid to Meena's UPI — before she even realizes she was covered.
 
----
-
 ### Scenario 3 — The Pollution Shutdown 🌫️
+
 **Arjun · Swiggy Partner · Delhi**
 
 AQI crosses 450 — Severe+ category. Government issues an outdoor activity advisory. Deliveries are halted citywide.
 
 **Result:** AQICN API flags the threshold breach. Arjun's zone is confirmed within the affected area. Payout auto-initiated for disrupted hours.
 
----
-
 ### Scenario 4 — The Fraud Attempt 🚨
+
 **Telegram Syndicate · 47 workers · Mumbai**
 
 A coordinated group attempts GPS-spoofing. 47 accounts simultaneously submit claims from the same GPS coordinate during a mild drizzle that doesn't meet the red-alert threshold.
@@ -123,16 +120,16 @@ A coordinated group attempts GPS-spoofing. 47 accounts simultaneously submit cla
 Think of it like a **Jio recharge** — pay a small amount on Monday, get full income protection for the week.
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│  Worker pays small weekly premium (e.g. ₹49)                │
-│                          ↓                                  │
-│  Gets income protection for 7 days                          │
-│                          ↓                                  │
-│  Disruption occurs (rain / curfew / outage)                 │
-│                          ↓                                  │
-│  Lost income returned AUTOMATICALLY to UPI                  │
-│       (more than they paid — no repayment ever)             │
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│  Worker pays small weekly premium (e.g. ₹49)                 │
+│                           ↓                                  │
+│  Gets income protection for 7 days                           │
+│                           ↓                                  │
+│  Disruption occurs (rain / curfew / outage)                  │
+│                           ↓                                  │
+│  Lost income returned AUTOMATICALLY to UPI                   │
+│        (more than they paid — no repayment ever)             │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 ### The Numbers, Made Simple
@@ -140,14 +137,14 @@ Think of it like a **Jio recharge** — pay a small amount on Monday, get full i
 **Ravi pays ₹49 on Monday. Heavy rain hits Thursday — 5 hours lost.**
 
 ```
-Hours lost:           5 hours
-Hourly earnings:      ₹75/hour
-Total income loss:    ₹375
+Hours lost:            5 hours
+Hourly earnings:       ₹75/hour
+Total income loss:     ₹375
 
-TrueDelivery pays:    ₹375 → Ravi's UPI  ✅
-Ravi paid:            ₹49 premium
+TrueDelivery pays:     ₹375 → Ravi's UPI  ✅
+Ravi paid:             ₹49 premium
 
-Net benefit:          Ravi saved ₹326 from total loss
+Net benefit:           Ravi saved ₹326 from total loss
 ```
 
 ### Does Ravi Repay the ₹375?
@@ -165,7 +162,7 @@ The 900 workers who had a good week fund the 100 who were disrupted. Nobody repa
 ### Payout vs Premium
 
 | Situation | Premium Paid | Payout Received | Net Outcome |
-|---|---|---|---|
+|:---|:---|:---|:---|
 | No disruption this week | ₹49 | ₹0 | Peace of mind, full week |
 | 3-hour rain disruption | ₹49 | ₹225 | **+₹176 saved** |
 | Full-day curfew | ₹49 | ₹600 | **+₹551 saved** |
@@ -178,16 +175,17 @@ The 900 workers who had a good week fund the 100 who were disrupted. Nobody repa
 ## 💳 Payment Models
 
 ### Model 1 — Self-Pay
+
 ```
 Ravi earns ₹4,200 this week from Swiggy
 → Manually pays ₹49 to TrueDelivery
 → Full week coverage activated
 ```
+
 Simple opt-in. No commitment required beyond 7 days.
 
----
-
 ### Model 2 — Platform Co-Pay ⭐ Recommended
+
 ```
 Swiggy contributes  ₹25  (half the premium)
 Ravi pays           ₹25  (other half)
@@ -196,6 +194,7 @@ Total:              ₹50  → Full coverage activated
 ```
 
 **Why would Swiggy / Zomato co-pay?**
+
 - Protected partners stay on-platform longer — lower churn
 - Less worker dropout during weather disruptions
 - Platform can brand themselves as *"We protect our delivery partners"*
@@ -204,20 +203,20 @@ Total:              ₹50  → Full coverage activated
 
 This is a **B2B2C distribution model** — TrueDelivery sells to platforms, platforms offer it to their workers.
 
----
-
 ### Model 3 — Auto-Deduct from Earnings (Zero Friction)
+
 ```
 Ravi earns ₹4,200 this week
 Swiggy auto-deducts ₹49 before settlement
 Ravi receives ₹4,151 — already insured, zero effort required
 ```
+
 Functionally identical to EPF deduction. The worker is always protected without any active decision.
 
----
-
 ### Zero-Balance Safety Net 🛟
+
 If a verified disruption hits and a worker's policy lapsed due to non-payment:
+
 - TrueDelivery issues a **one-time emergency micro-payout of ₹100**
 - Automatically recovered from their next premium payment
 - No worker is ever left entirely unprotected
@@ -227,41 +226,41 @@ If a verified disruption hits and a worker's policy lapsed due to non-payment:
 ## 🔄 Application Workflow
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                      WORKER JOURNEY                         │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  1. ONBOARD                                                 │
-│     Mobile OTP login → Link Swiggy/Zomato Worker ID         │
-│     → Select operating zones on HyperZone Map               │
-│     → Declare weekly earnings                               │
-│     → AI generates Risk Profile Score                       │
-│                                                             │
-│  2. SUBSCRIBE                                               │
-│     View AI-calculated weekly premium (with breakdown)      │
-│     → Pay via UPI or auto-deduct from platform earnings     │
-│     → Policy activated for 7 days                           │
-│                                                             │
-│  3. WORK NORMALLY                                           │
-│     TrueDelivery monitors disruptions in real time          │
-│     HyperZone Map shows live zone safety status             │
-│     Earnings Forecast shows tomorrow's weather risk         │
-│                                                             │
-│  4. DISRUPTION DETECTED                                     │
-│     Parametric trigger fires automatically                  │
-│     → Fraud check runs silently in the background           │
-│     → Claim auto-initiated with zero worker effort          │
-│                                                             │
-│  5. PAYOUT DECISION                                         │
-│     🟢 Risk Score 0–40:   Instant UPI payout               │
-│     🟡 Risk Score 41–70:  2-hour hold → Auto-approved       │
-│     🔴 Risk Score 71–100: Lightweight selfie verification   │
-│                                                             │
-│  6. DASHBOARD                                               │
-│     Earnings protected · Active policy · Zone alerts        │
-│     Payout history · Streak rewards · Weekly forecast       │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                       WORKER JOURNEY                         │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  1. ONBOARD                                                  │
+│     Mobile OTP login → Link Swiggy/Zomato Worker ID          │
+│     → Select operating zones on HyperZone Map                │
+│     → Declare weekly earnings                                │
+│     → AI generates Risk Profile Score                        │
+│                                                              │
+│  2. SUBSCRIBE                                                │
+│     View AI-calculated weekly premium (with breakdown)       │
+│     → Pay via UPI or auto-deduct from platform earnings      │
+│     → Policy activated for 7 days                            │
+│                                                              │
+│  3. WORK NORMALLY                                            │
+│     TrueDelivery monitors disruptions in real time           │
+│     HyperZone Map shows live zone safety status              │
+│     Earnings Forecast shows tomorrow's weather risk          │
+│                                                              │
+│  4. DISRUPTION DETECTED                                      │
+│     Parametric trigger fires automatically                   │
+│     → Fraud check runs silently in the background            │
+│     → Claim auto-initiated with zero worker effort           │
+│                                                              │
+│  5. PAYOUT DECISION                                          │
+│     🟢 Risk Score 0–40:   Instant UPI payout                │
+│     🟡 Risk Score 41–70:  2-hour hold → Auto-approved        │
+│     🔴 Risk Score 71–100: Lightweight selfie verification    │
+│                                                              │
+│  6. DASHBOARD                                                │
+│     Earnings protected · Active policy · Zone alerts         │
+│     Payout history · Streak rewards · Weekly forecast        │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -290,7 +289,7 @@ Weekly Premium  =  Base Premium
 ### Coverage Tiers
 
 | Tier | Weekly Premium | Max Weekly Payout | Best For |
-|---|---|---|---|
+|:---|:---|:---|:---|
 | Basic Shield | ₹35–49 | ₹1,800 | Part-time / new workers |
 | Standard Shield | ₹49–89 | ₹2,700 | Full-time workers ⭐ |
 | Pro Shield | ₹89–120 | ₹4,000 | High-earning partners |
@@ -300,7 +299,7 @@ Weekly Premium  =  Base Premium
 ### Dynamic Adjustment Factors
 
 | Factor | Premium Impact |
-|---|---|
+|:---|:---|
 | Flood-prone zone (e.g. Old City Hyderabad) | +₹5 to +₹15/week |
 | Monsoon season (June–September) | +₹8/week |
 | Loyalty: 3+ months active | −₹5/week |
@@ -313,9 +312,9 @@ Weekly Premium  =  Base Premium
 Payout = (Weekly Earnings ÷ 7 days ÷ Daily working hours) × Disrupted hours
 
 Example:
-Worker earns ₹4,200/week, works 8 hrs/day, disruption = 4 hours
-→ ₹4,200 ÷ 7 ÷ 8 = ₹75/hr
-→ ₹75 × 4 hrs = ₹300 payout
+  Worker earns ₹4,200/week, works 8 hrs/day, disruption = 4 hours
+  → ₹4,200 ÷ 7 ÷ 8 = ₹75/hr
+  → ₹75 × 4 hrs = ₹300 payout
 ```
 
 ---
@@ -325,7 +324,7 @@ Worker earns ₹4,200/week, works 8 hrs/day, disruption = 4 hours
 Five automated triggers monitor in real time. When any threshold is breached within a worker's registered zone, a claim is initiated automatically — no manual filing required.
 
 | # | Trigger | Data Source | Threshold | Worker Impact |
-|---|---|---|---|---|
+|:---|:---|:---|:---|:---|
 | 1 | Heavy Rainfall | OpenWeatherMap API | > 50mm/hr **or** Red Alert issued | Deliveries halted, roads flooded |
 | 2 | Extreme Heat | OpenWeatherMap API | > 43°C sustained for 2+ hours | Outdoor work unsafe |
 | 3 | Severe Pollution | AQICN API | AQI > 400 (Severe+) | Platform suspends outdoor deliveries |
@@ -338,26 +337,27 @@ Five automated triggers monitor in real time. When any threshold is breached wit
 
 ### Worker Mobile App
 
-**1. HyperZone Live Map 🗺️**
+#### 1. HyperZone Live Map 🗺️
+
 A live color-coded map of the worker's city showing zone status in real time.
+
 - 🟢 Green — safe to work
 - 🟡 Yellow — mild disruption, monitoring
 - 🔴 Red — active disruption, claim triggered
 
 Workers can tap any zone to see: *"Heavy rain detected. Coverage triggers in 12 minutes if you're operating here."*
 
----
+#### 2. Earnings Forecast Widget 📈
 
-**2. Earnings Forecast Widget 📈**
 Predictive weather and disruption forecasting integrated into the app's home screen.
+
 - *"Tomorrow: 70% chance of heavy rain in your zone"*
 - *"Recommendation: Upgrade to Pro Shield this week for an extra ₹800 coverage"*
 
 Powered by weather forecast API + ML model. TrueDelivery becomes a financial companion, not just insurance.
 
----
+#### 3. Hinglish Voice Assistant 🎙️
 
-**3. Hinglish Voice Assistant 🎙️**
 Full accessibility for low-literacy workers through natural language voice queries.
 
 > Worker: *"Aaj kitna milega agar barish ho?"*
@@ -365,20 +365,17 @@ Full accessibility for low-literacy workers through natural language voice queri
 
 Powered by device speech-to-text + Claude API. Supports Hindi, Hinglish, and regional language variants.
 
----
-
-**4. Weekly Streak Rewards 🏆**
+#### 4. Weekly Streak Rewards 🏆
 
 | Streak | Status | Benefit |
-|---|---|---|
+|:---|:---|:---|
 | 4-week renewal | Loyal Rider | ₹10 discount/week |
 | 8-week renewal | TrueWarrior | Priority payout in 30 seconds |
 
 Drives retention and reduces platform churn — aligned with both worker and platform interests.
 
----
+#### 5. Instant Payout Countdown ⏱️
 
-**5. Instant Payout Countdown ⏱️**
 ```
 ✅ Claim Approved!
 💰 ₹285 incoming to your UPI
@@ -389,27 +386,29 @@ Arriving in: 00:43 seconds
 Ravi Kumar — SBI UPI
 ```
 
----
+#### 6. Payout Split Intelligence 💳
 
-**6. Payout Split Intelligence 💳**
 Workers define their own payout routing rules:
+
 - *"Send ₹200 to PhonePe for fuel, rest to savings"*
 - *"If payout > ₹500, move 20% to savings jar automatically"*
 
 Financial wellness built directly into the insurance product.
 
----
-
 ### AI Fraud Detection Suite
 
-**7. Digital Twin Verification 👥**
+#### 7. Digital Twin Verification 👥
+
 Every worker has a persistent AI behavioral model built from their zone history, working hours, movement speeds, and battery usage patterns. Every claim is cross-checked against this twin. A fraudster spoofing another worker's GPS coordinates fails the behavioral consistency check entirely.
 
-**8. Telegram Honeypot Monitor 🍯** *(Simulated)*
+#### 8. Telegram Honeypot Monitor 🍯 *(Simulated)*
+
 Monitors for coordinated claim spikes matching known fraud syndicate patterns. In the demo: a simulated Telegram message — *"CLAIM NOW — Zone 4"* — triggers 30 simultaneous claims. The system detects and freezes all 30 in real time. Directly addresses the DEVTrails 2026 fraud scenario.
 
-**9. Crowd Consensus Validator 🤝**
+#### 9. Crowd Consensus Validator 🤝
+
 A genuine flood affects hundreds of workers across a zone. Fraud is always a small isolated cluster.
+
 - 50 workers in a zone showing rain signals → high confidence, real event
 - 2 workers claiming, zero others showing disruption → suspicious, flagged for review
 - Real disruptions have spatial distribution. Fraud rings have pinpoint clustering.
@@ -419,38 +418,43 @@ A genuine flood affects hundreds of workers across a zone. Fraud is always a sma
 ## 🧠 AI/ML Architecture
 
 ### 1. Risk Profiling Engine
+
 | Property | Detail |
-|---|---|
+|:---|:---|
 | Model | Gradient Boosted Decision Tree (scikit-learn / XGBoost) |
 | Inputs | Worker zone, city, platform, historical weather, claim history |
 | Output | Risk Score 0–100 → feeds weekly premium calculation |
 | Update frequency | Every Sunday night for the upcoming week |
 
 ### 2. Dynamic Premium Calculator
+
 | Property | Detail |
-|---|---|
+|:---|:---|
 | Model | Rule-based regression with zone-level weighting |
 | Transparency | Worker sees a full factor-by-factor breakdown of premium changes |
 | Constraint | Premium capped at 2% of declared weekly earnings |
 
 ### 3. Fraud Detection Model
+
 | Property | Detail |
-|---|---|
+|:---|:---|
 | Model | Isolation Forest + rule-based anomaly detection |
 | Inputs | Device signals, behavioral history, cluster analysis, platform activity |
 | Output | Fraud Risk Score → 🟢 Auto-approve / 🟡 Soft hold / 🔴 Verify |
 | Speed | Completes within seconds of claim initiation |
 
 ### 4. Digital Twin Model
+
 | Property | Detail |
-|---|---|
+|:---|:---|
 | Model | Unsupervised behavioral clustering per worker ID |
 | Training data | 4 weeks of zone history, working hours, movement patterns |
 | Purpose | Detects claims that are behaviorally inconsistent with the worker's established profile |
 
 ### 5. Predictive Disruption Model (Admin)
+
 | Property | Detail |
-|---|---|
+|:---|:---|
 | Model | Time-series forecasting — Prophet / LSTM |
 | Purpose | Predict next week's likely claim surge by zone for liquidity management |
 | Consumer | Insurer admin dashboard — proactive reserve allocation |
@@ -465,8 +469,6 @@ A genuine flood affects hundreds of workers across a zone. Fraud is always a sma
 
 Organized groups coordinate via Telegram to spoof GPS coordinates into active disruption zones, triggering false parametric payouts and draining the insurance liquidity pool — without leaving home.
 
----
-
 ### What a Fraudster Can and Cannot Fake
 
 A fraudster can fake GPS. They cannot fake everything simultaneously.
@@ -474,7 +476,7 @@ A fraudster can fake GPS. They cannot fake everything simultaneously.
 TrueDelivery builds a **Behavioral Consistency Score** across seven independent, uncorrelated signal layers:
 
 | Signal | Genuine Worker | Spoofer |
-|---|---|---|
+|:---|:---|:---|
 | Device accelerometer | Moving or sheltering from rain | Stationary at home |
 | Mock Location API flag | OFF | ON |
 | Network connection type | Mobile data (weakened by storm) | Home WiFi |
@@ -483,11 +485,10 @@ TrueDelivery builds a **Behavioral Consistency Score** across seven independent,
 | Zone history (4 weeks) | Has regularly delivered in this zone | May have never worked there |
 | Digital Twin match | Consistent behavioral profile | Statistically inconsistent |
 
----
-
 ### Defense Layers
 
 **Layer 1 — Device Intelligence**
+
 - Android Mock Location API flag detection
 - WiFi SSID check — outdoor workers in a storm are not on home WiFi
 - Accelerometer and gyroscope movement pattern analysis
@@ -495,6 +496,7 @@ TrueDelivery builds a **Behavioral Consistency Score** across seven independent,
 - IP address geolocation cross-verification
 
 **Layer 2 — Behavioral & Historical Intelligence**
+
 - Worker's last 4 weeks of zone activity
 - Sudden first-time claims in unfamiliar zones — flagged immediately
 - Time-of-day pattern matching against established work schedule
@@ -502,19 +504,19 @@ TrueDelivery builds a **Behavioral Consistency Score** across seven independent,
 - Digital Twin behavioral consistency scoring
 
 **Layer 3 — Environmental Cross-Validation**
+
 - Weather API confirmation — does the disruption actually exist at that pin code?
 - Order volume drop — did Zomato/Swiggy orders actually decrease in the claimed zone?
 - News and public signal monitoring — independent confirmation of the event
 
 **Layer 4 — Syndicate Detection**
+
 - Cluster analysis: 15+ claims within 100m of the same GPS pin within 5 minutes → auto-freeze all
 - Device fingerprint matching: same physical device registered under multiple worker IDs
 - IP range analysis: multiple simultaneous claimers sharing the same subnet
 - Simultaneity detection: statistically impossible claim timing patterns
 
 > In a genuine flood, hundreds of workers file claims from different locations over hours. In a fraud ring, claims arrive from the same coordinate within seconds. That statistical impossibility is the strongest detection signal in the system.
-
----
 
 ### Fraud Risk Tiers — UX That Protects Without Punishing
 
@@ -523,12 +525,13 @@ TrueDelivery builds a **Behavioral Consistency Score** across seven independent,
 > ⚠️ Network degradation during a genuine storm is expected and normal. A failed WiFi check alone is never grounds for denial.
 
 | Tier | Risk Score | Action | Experience |
-|---|---|---|---|
+|:---|:---|:---|:---|
 | 🟢 Auto-Approve | 0–40 | Instant UPI payout | ~80% of all claims |
 | 🟡 Soft Hold | 41–70 | 2-hour hold, auto-resolved | ~15% of claims |
 | 🔴 Verify | 71–100 | One 10-second selfie video | ~5% of claims |
 
 **Worker-Facing Language Policy**
+
 - ❌ Never use: "fraud", "suspicious", "flagged", "blocked"
 - ✅ Always use: "verification", "signal check", "confirming your location"
 
@@ -539,7 +542,7 @@ A genuine worker caught in a storm will experience the 🟡 hold as a minor dela
 ## 🔧 Tech Stack
 
 | Layer | Technology | Rationale |
-|---|---|---|
+|:---|:---|:---|
 | Mobile App | Flutter | Cross-platform iOS + Android from a single codebase |
 | Web Dashboard | React + Tailwind CSS | Fast, component-based, well-suited for real-time dashboards |
 | Backend | Node.js + Express | Lightweight, non-blocking API layer |
@@ -559,6 +562,7 @@ A genuine worker caught in a storm will experience the 🟡 hold as a minor dela
 ## 🗓️ Development Roadmap
 
 ### Phase 1 — Ideation & Foundation `March 4–20` ✅
+
 - [x] Problem research and delivery partner persona definition
 - [x] Core architecture and system design
 - [x] Weekly premium model and payment model design
@@ -568,6 +572,7 @@ A genuine worker caught in a storm will experience the 🟡 hold as a minor dela
 - [x] Full README documentation
 
 ### Phase 2 — Automation & Protection `March 21 – April 4`
+
 - [ ] Worker onboarding flow (Flutter mobile app)
 - [ ] HyperZone Live Map integration
 - [ ] AI weekly premium calculator with risk scoring
@@ -579,6 +584,7 @@ A genuine worker caught in a storm will experience the 🟡 hold as a minor dela
 - [ ] Earnings Forecast Widget
 
 ### Phase 3 — Scale & Optimise `April 5–17`
+
 - [ ] Digital Twin fraud detection model
 - [ ] Telegram Honeypot Monitor (simulated)
 - [ ] Crowd Consensus Validator
@@ -596,7 +602,7 @@ A genuine worker caught in a storm will experience the 🟡 hold as a minor dela
 ## 🎯 Target Market
 
 | Dimension | Details |
-|---|---|
+|:---|:---|
 | Geography | Pan-India — all major cities and tier-2 towns with active Zomato/Swiggy operations |
 | Addressable users | ~5 million active food delivery partners |
 | Launch cities | Delhi · Mumbai · Bengaluru · Hyderabad · Chennai · Pune · Kolkata · Ahmedabad |
@@ -608,7 +614,7 @@ A genuine worker caught in a storm will experience the 🟡 hold as a minor dela
 ## 👥 Team
 
 | Name | Role | Institution |
-|---|---|---|
+|:---|:---|:---|
 | *(Add name)* | *(Add role)* | *(Add institution)* |
 | *(Add name)* | *(Add role)* | *(Add institution)* |
 | *(Add name)* | *(Add role)* | *(Add institution)* |
@@ -618,7 +624,7 @@ A genuine worker caught in a storm will experience the 🟡 hold as a minor dela
 ## 🔗 Links
 
 | Resource | Link |
-|---|---|
+|:---|:---|
 | 🎥 Phase 1 Video | *(to be added)* |
 | 🌐 Live Demo | *(to be added)* |
 | 📊 Pitch Deck | *(to be added)* |

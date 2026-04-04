@@ -58,7 +58,7 @@ export default function Sidebar({ active, onNav, workerOnboarded, isMobile, isOp
                 gap: 10,
                 width: '100%',
                 padding: '9px 12px',
-                marginBottom: 2,
+                marginBottom: 4,
                 borderRadius: 8,
                 border: 'none',
                 cursor: isLocked ? 'not-allowed' : 'pointer',
@@ -90,7 +90,7 @@ export default function Sidebar({ active, onNav, workerOnboarded, isMobile, isOp
             type="button"
             className="btn btn-ghost btn-sm"
             onClick={onReset}
-            style={{ marginTop: 14, width: '100%' }}
+            style={{ marginTop: 14, width: '100%', maxWidth: 180 }}
           >
             Restart Demo
           </button>

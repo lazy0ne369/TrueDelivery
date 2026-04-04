@@ -50,7 +50,7 @@ export default function Onboarding({ onComplete }) {
 
       {/* Stepper */}
       <div style={{ display: 'flex', gap: 0, marginBottom: 32, position: 'relative' }}>
-        <div style={{ position: 'absolute', top: 14, left: '5%', right: '5%', height: 1, background: 'var(--border2)' }} />
+        <div style={{ position: 'absolute', top: 14, left: '12%', right: '12%', height: 1, background: 'var(--border2)' }} />
         {STEPS.map((s, i) => (
           <div key={s} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, zIndex: 1 }}>
             <div style={{
@@ -84,7 +84,7 @@ export default function Onboarding({ onComplete }) {
           </div>
           <div>
             <label>Aadhaar Number (for KYC)</label>
-            <div style={{ display: 'flex', gap: 10 }}>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <input placeholder="XXXX XXXX XXXX" value={form.aadhar} onChange={e => set('aadhar', e.target.value)} style={{ flex: 1 }} />
               <button className="btn btn-ghost btn-sm" onClick={handleVerify} disabled={verifying || verified} style={{ whiteSpace: 'nowrap', minWidth: 100 }}>
                 {verifying ? 'Verifying...' : verified ? '✓ Verified' : 'Verify KYC'}
