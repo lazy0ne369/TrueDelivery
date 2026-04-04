@@ -1,7 +1,17 @@
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(
+  /\/$/,
+  "",
+);
+
+function buildUrl(path) {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return API_BASE_URL ? `${API_BASE_URL}${normalizedPath}` : normalizedPath;
+}
+
 async function request(path, options = {}) {
-  const response = await fetch(path, {
+  const response = await fetch(buildUrl(path), {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...(options.headers || {}),
     },
     ...options,
@@ -10,32 +20,32 @@ async function request(path, options = {}) {
   const payload = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(payload.error || 'Request failed.');
+    throw new Error(payload.error || "Request failed.");
   }
 
   return payload;
 }
 
 export function fetchBootstrap() {
-  return request('/api/bootstrap');
+  return request("/api/bootstrap");
 }
 
 export function saveWorkerProfile(worker) {
-  return request('/api/worker', {
-    method: 'PUT',
+  return request("/api/worker", {
+    method: "PUT",
     body: JSON.stringify(worker),
   });
 }
 
 export function simulateDisruptionRequest(disruptionId) {
-  return request('/api/simulate-disruption', {
-    method: 'POST',
+  return request("/api/simulate-disruption", {
+    method: "POST",
     body: JSON.stringify({ disruptionId }),
   });
 }
 
 export function resetDemoRequest() {
-  return request('/api/reset-demo', {
-    method: 'POST',
+  return request("/api/reset-demo", {
+    method: "POST",
   });
 }

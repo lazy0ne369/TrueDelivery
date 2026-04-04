@@ -1,25 +1,49 @@
-import express from 'express';
+import express from "express";
+import cors from "cors";
 import {
   getSnapshot,
   resetDemoState,
   saveWorker,
   simulateDisruption,
-} from './store.js';
+} from "./store.js";
 
 const app = express();
 const PORT = Number(process.env.PORT || 8787);
+const configuredOrigins = (process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const allowedOrigins =
+  configuredOrigins.length > 0
+    ? configuredOrigins
+    : ["http://localhost:5173", "http://127.0.0.1:5173"];
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      const error = new Error("Origin is not allowed by CORS policy.");
+      error.statusCode = 403;
+      callback(error);
+    },
+  }),
+);
 
 app.use(express.json());
 
-app.get('/api/health', async (_request, response) => {
+app.get("/api/health", async (_request, response) => {
   response.json({
     ok: true,
-    service: 'truedelivery-demo-api',
+    service: "truedelivery-demo-api",
     time: new Date().toISOString(),
   });
 });
 
-app.get('/api/bootstrap', async (_request, response, next) => {
+app.get("/api/bootstrap", async (_request, response, next) => {
   try {
     response.json(await getSnapshot());
   } catch (error) {
@@ -27,7 +51,7 @@ app.get('/api/bootstrap', async (_request, response, next) => {
   }
 });
 
-app.put('/api/worker', async (request, response, next) => {
+app.put("/api/worker", async (request, response, next) => {
   try {
     response.json(await saveWorker(request.body || {}));
   } catch (error) {
@@ -35,7 +59,7 @@ app.put('/api/worker', async (request, response, next) => {
   }
 });
 
-app.post('/api/simulate-disruption', async (request, response, next) => {
+app.post("/api/simulate-disruption", async (request, response, next) => {
   try {
     response.json(await simulateDisruption(request.body?.disruptionId));
   } catch (error) {
@@ -43,7 +67,7 @@ app.post('/api/simulate-disruption', async (request, response, next) => {
   }
 });
 
-app.post('/api/reset-demo', async (_request, response, next) => {
+app.post("/api/reset-demo", async (_request, response, next) => {
   try {
     response.json(await resetDemoState());
   } catch (error) {
@@ -54,7 +78,7 @@ app.post('/api/reset-demo', async (_request, response, next) => {
 app.use((error, _request, response, _next) => {
   const statusCode = error.statusCode || 500;
   response.status(statusCode).json({
-    error: error.message || 'Unexpected server error',
+    error: error.message || "Unexpected server error",
   });
 });
 
