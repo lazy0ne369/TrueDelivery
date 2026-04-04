@@ -111,7 +111,7 @@ export default function App() {
         }
       } catch {
         if (!cancelled) {
-          setApiError('Action 2 backend is offline. Start `npm run dev:full` to enable API-driven features.');
+          setApiError('Backend is unreachable. Verify VITE_API_BASE_URL on Vercel and CORS_ORIGIN on Render, then redeploy.');
         }
       } finally {
         if (!cancelled) {

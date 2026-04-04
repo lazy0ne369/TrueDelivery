@@ -1,11 +1,21 @@
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").trim().replace(
   /\/$/,
   "",
 );
 
 function buildUrl(path) {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  return API_BASE_URL ? `${API_BASE_URL}${normalizedPath}` : normalizedPath;
+
+  if (!API_BASE_URL) {
+    return normalizedPath;
+  }
+
+  // Avoid /api/api/* when base URL already includes /api
+  if (API_BASE_URL.endsWith("/api") && normalizedPath.startsWith("/api/")) {
+    return `${API_BASE_URL}${normalizedPath.slice(4)}`;
+  }
+
+  return `${API_BASE_URL}${normalizedPath}`;
 }
 
 async function request(path, options = {}) {
