@@ -2,3 +2,6 @@ node_modules/
 dist/
 .DS_Store
 Thumbs.db
+server/data/runtime.json
+vite-dev.log
+api-dev.log

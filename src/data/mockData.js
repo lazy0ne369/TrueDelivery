@@ -7,7 +7,7 @@ export const DISRUPTIONS = [
     icon: '🌧️',
     color: 'var(--blue)',
     bg: 'var(--bluebg)',
-    condition: 'Rainfall ≥ 20mm/hr or Red Alert',
+    condition: 'Rainfall >= 20 mm/hr or red alert',
     source: 'OpenWeather API',
     payout: 500,
     threshold: { rainfall: 20, alert: 'red' },
@@ -19,7 +19,7 @@ export const DISRUPTIONS = [
     icon: '☀️',
     color: 'var(--yellow)',
     bg: 'var(--yellowbg)',
-    condition: 'Temp ≥ 42°C + Heat advisory',
+    condition: 'Temp >= 42°C with heat advisory',
     source: 'OpenWeather API',
     payout: 350,
     threshold: { temp: 42 },
@@ -31,7 +31,7 @@ export const DISRUPTIONS = [
     icon: '🌫️',
     color: 'var(--red)',
     bg: 'var(--redbg)',
-    condition: 'AQI ≥ 300 (Hazardous)',
+    condition: 'AQI >= 300 (Hazardous)',
     source: 'CPCB / AQICN API',
     payout: 400,
     threshold: { aqi: 300 },
@@ -43,11 +43,11 @@ export const DISRUPTIONS = [
     icon: '📵',
     color: 'var(--purple)',
     bg: 'var(--purplebg)',
-    condition: 'Swiggy/Zomato down ≥ 2 hrs',
+    condition: 'Swiggy or Zomato down for >= 2 hrs',
     source: 'StatusPage mock API',
     payout: 300,
     threshold: { duration: 120 },
-    description: 'Covers income lost when delivery app is unavailable',
+    description: 'Covers income lost when the delivery app is unavailable',
   },
   {
     id: 'curfew-strike',
@@ -72,10 +72,10 @@ export const ZONES = [
   { id: 'hyd-kondapur', name: 'Kondapur / Madhapur', risk: 'low', floodRisk: 0.75, factor: 0.88 },
 ];
 
-export const MOCK_LIVE_DATA = {
-  weather: { temp: 38, rainfall: 4, condition: 'Partly Cloudy', humidity: 68 },
-  aqi: { value: 187, category: 'Unhealthy', city: 'Hyderabad' },
-  platform: { swiggy: 'operational', zomato: 'operational' },
+export const LIVE_CONDITIONS = {
+  weather: { temp: 38, rainfall: 4, condition: 'Partly Cloudy', humidity: 68, windSpeed: 14 },
+  aqi: { value: 187, category: 'Unhealthy', city: 'Hyderabad', pm25: 142 },
+  platform: { swiggy: 'operational', zomato: 'operational', downtimeMinutes: 0 },
   alerts: [],
 };
 
@@ -83,6 +83,7 @@ export const MOCK_CLAIMS = [
   {
     id: 'CLM-2024-001',
     type: 'Heavy Rain',
+    disruptionId: 'heavy-rain',
     icon: '🌧️',
     date: '2024-12-18',
     status: 'paid',
@@ -91,10 +92,13 @@ export const MOCK_CLAIMS = [
     autoTriggered: true,
     payoutChannel: 'UPI',
     zone: 'Old City / Charminar',
+    payoutEta: '2.3 min',
+    recipientUpi: 'ravikumar@upi',
   },
   {
     id: 'CLM-2024-002',
     type: 'Platform Outage',
+    disruptionId: 'platform-outage',
     icon: '📵',
     date: '2024-12-10',
     status: 'paid',
@@ -103,10 +107,13 @@ export const MOCK_CLAIMS = [
     autoTriggered: true,
     payoutChannel: 'UPI',
     zone: 'Gachibowli',
+    payoutEta: '2.3 min',
+    recipientUpi: 'ravikumar@upi',
   },
   {
     id: 'CLM-2024-003',
     type: 'Severe Pollution',
+    disruptionId: 'severe-aqi',
     icon: '🌫️',
     date: '2024-11-28',
     status: 'paid',
@@ -115,12 +122,14 @@ export const MOCK_CLAIMS = [
     autoTriggered: true,
     payoutChannel: 'UPI',
     zone: 'Old City / Charminar',
+    payoutEta: '2.3 min',
+    recipientUpi: 'ravikumar@upi',
   },
 ];
 
 export const ADMIN_STATS = {
   totalWorkers: 4284,
-  activePolices: 3891,
+  activePolicies: 3891,
   totalPremiumCollected: 312400,
   totalPayouts: 228600,
   lossRatio: 73.2,
@@ -129,7 +138,7 @@ export const ADMIN_STATS = {
   weeklyNewSignups: 134,
   claimsByType: [
     { name: 'Heavy Rain', value: 38, color: 'var(--blue)' },
-    { name: 'Curfew/Strike', value: 22, color: 'var(--accent)' },
+    { name: 'Curfew / Strike', value: 22, color: 'var(--accent)' },
     { name: 'Pollution', value: 18, color: 'var(--red)' },
     { name: 'Platform Outage', value: 14, color: 'var(--purple)' },
     { name: 'Extreme Heat', value: 8, color: 'var(--yellow)' },
@@ -153,7 +162,7 @@ export const ADMIN_STATS = {
 };
 
 export function calculatePremium(profile) {
-  const base = 59; // ₹59 base
+  const base = 59;
   const zone = ZONES.find(z => z.id === profile.zone) || ZONES[0];
   const seasonFactor = profile.season === 'monsoon' ? 1.3 : profile.season === 'summer' ? 1.15 : 0.9;
   const historyFactor = profile.claims === 0 ? 0.9 : profile.claims <= 2 ? 1.0 : 1.15;
@@ -162,7 +171,15 @@ export function calculatePremium(profile) {
   const premium = Math.round(base * zone.factor * seasonFactor * historyFactor * coverageFactor);
   const maxPayout = profile.coverage === 'basic' ? 1800 : profile.coverage === 'standard' ? 2700 : 4000;
 
-  return { premium, maxPayout, zoneFactor: zone.factor, seasonFactor, historyFactor, zone };
+  return {
+    premium,
+    maxPayout,
+    zoneFactor: zone.factor,
+    seasonFactor,
+    historyFactor,
+    coverageFactor,
+    zone,
+  };
 }
 
 export function getRiskScore(profile) {

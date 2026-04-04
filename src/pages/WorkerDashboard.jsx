@@ -1,85 +1,225 @@
 import React from 'react';
-import { MOCK_CLAIMS, DISRUPTIONS, calculatePremium } from '../data/mockData.js';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { DISRUPTIONS, calculatePremium } from '../data/mockData.js';
+import { buildRecentActivity, getClaimStats } from '../lib/demoState.js';
 import { getCoverageWindow } from '../lib/appConfig.js';
 
-const earningsData = [
-  { week: 'W1', earned: 4200, protected: 500 },
-  { week: 'W2', earned: 5100, protected: 0 },
-  { week: 'W3', earned: 3800, protected: 500 },
-  { week: 'W4', earned: 4900, protected: 400 },
-  { week: 'W5', earned: 4600, protected: 0 },
-  { week: 'W6', earned: 5200, protected: 300 },
-];
+const WEEKLY_EARNINGS_BASE = [4200, 5100, 3800, 4900, 4600, 5200];
 
-const maxDisruptionPayout = Math.max(...DISRUPTIONS.map(d => d.payout));
+const TONE_STYLES = {
+  critical: { borderColor: 'rgba(239,68,68,0.28)', background: 'rgba(239,68,68,0.08)', color: 'var(--red)' },
+  warning: { borderColor: 'rgba(234,179,8,0.28)', background: 'rgba(234,179,8,0.08)', color: 'var(--yellow)' },
+  good: { borderColor: 'rgba(34,197,94,0.28)', background: 'rgba(34,197,94,0.08)', color: 'var(--green)' },
+  info: { borderColor: 'rgba(96,165,250,0.28)', background: 'rgba(96,165,250,0.08)', color: 'var(--blue)' },
+  neutral: { borderColor: 'var(--border)', background: 'var(--bg3)', color: 'var(--text2)' },
+};
 
-export default function WorkerDashboard({ worker }) {
+function getWeekStart(date) {
+  const current = new Date(date);
+  current.setHours(0, 0, 0, 0);
+
+  const day = current.getDay();
+  const diffToMonday = day === 0 ? -6 : 1 - day;
+  current.setDate(current.getDate() + diffToMonday);
+  return current;
+}
+
+function buildWeeklyEarningsSeries(claims) {
+  const currentWeekStart = getWeekStart(new Date());
+
+  return Array.from({ length: 6 }, (_, index) => {
+    const weekStart = new Date(currentWeekStart);
+    weekStart.setDate(currentWeekStart.getDate() - (5 - index) * 7);
+
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+
+    const protectedAmount = claims.reduce((sum, claim) => {
+      const claimDate = new Date(claim.date);
+      return claimDate >= weekStart && claimDate <= weekEnd ? sum + claim.amount : sum;
+    }, 0);
+
+    return {
+      week: weekStart.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }),
+      earned: WEEKLY_EARNINGS_BASE[index],
+      protected: protectedAmount,
+    };
+  });
+}
+
+export default function WorkerDashboard({
+  worker,
+  claims,
+  alerts,
+  insights,
+  apiConnected,
+  lastSyncedAt,
+}) {
   const { premium, maxPayout } = calculatePremium(worker);
-  const totalProtected = MOCK_CLAIMS.reduce((s, c) => s + c.amount, 0);
+  const { totalPaid, totalClaims } = getClaimStats(claims);
   const totalPremiumPaid = premium * 6;
-  const protectionRatio = totalPremiumPaid > 0 ? Math.round(totalProtected / totalPremiumPaid * 100) : 0;
+  const protectionRatio = totalPremiumPaid > 0 ? Math.round((totalPaid / totalPremiumPaid) * 100) : 0;
+  const earningsData = buildWeeklyEarningsSeries(claims);
+  const recentActivities = buildRecentActivity({ claims, premium, alerts });
   const today = new Date();
   const { weekEnd } = getCoverageWindow(today);
   const renewalDate = new Date(weekEnd);
   renewalDate.setDate(weekEnd.getDate() + 1);
-
-  // Dynamic relative dates based on current week
-  const thisMonday = new Date(today);
-  const dayOfWeek = thisMonday.getDay();
-  const diffToMon = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-  thisMonday.setDate(today.getDate() + diffToMon);
-  const fmtShort = d => d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+  const statusSummary = [
+    { label: 'Policy status', value: 'Active' },
+    { label: 'Best next move', value: insights[0]?.title || 'Watch live conditions' },
+    { label: 'Support mode', value: apiConnected ? 'Backend connected' : 'Local fallback' },
+  ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {/* Greeting */}
-      <div style={{
-        padding: '24px 28px',
-        background: 'linear-gradient(135deg, var(--bg2) 0%, rgba(249,115,22,0.08) 100%)',
-        borderRadius: 'var(--radius)',
-        border: '1px solid #f9731630',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16,
-      }}>
-        <div>
-          <div style={{ fontSize: 13, color: 'var(--text3)', marginBottom: 4 }}>{today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
-          <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 4 }}>
-            Namaste, {worker.name?.split(' ')[0] || 'Ravi'} 👋
-          </h1>
-          <p style={{ color: 'var(--text2)', fontSize: 14 }}>Your income is protected this week. Keep delivering!</p>
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: 11, color: 'var(--text3)', marginBottom: 4 }}>Current week coverage</div>
-          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 32, color: 'var(--green)' }}>₹{maxPayout.toLocaleString()}</div>
-          <div style={{ fontSize: 12, color: 'var(--text3)' }}>renews {renewalDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
+    <div className="page-shell">
+      <div className="page-hero">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
+          <div style={{ flex: 1, minWidth: 260 }}>
+            <div className="page-kicker">
+              {today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}
+            </div>
+            <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8 }}>
+              Hello, {worker.name?.split(' ')[0] || 'Ravi'}.
+            </h1>
+            <p className="page-lead">
+              Your coverage is active. This page shows the money protected, the latest alerts, and the one action that
+              matters most right now.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 14 }}>
+              {statusSummary.map(item => (
+                <span key={item.label} className="badge badge-blue" style={{ textTransform: 'none', letterSpacing: 0, padding: '6px 12px' }}>
+                  {item.label}: {item.value}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="card-sm" style={{ minWidth: 250, background: 'rgba(255, 255, 255, 0.03)' }}>
+            <div style={{ fontSize: 11, color: 'var(--text3)', marginBottom: 4 }}>Current week coverage</div>
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 34, color: 'var(--green)', lineHeight: 1 }}>
+              Rs.{maxPayout.toLocaleString()}
+            </div>
+            <div style={{ fontSize: 12, color: 'var(--text3)', marginTop: 6 }}>
+              Renews {renewalDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+            </div>
+            <div style={{ fontSize: 11, color: apiConnected ? 'var(--green)' : 'var(--yellow)', marginTop: 10 }}>
+              {apiConnected ? 'Backend connected' : 'Local fallback mode'}
+              {lastSyncedAt ? ` - ${new Date(lastSyncedAt).toLocaleTimeString('en-IN')}` : ''}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Key stats */}
       <div className="grid-4">
         {[
-          { label: 'Income protected', value: `₹${totalProtected.toLocaleString()}`, sub: 'lifetime claims paid', color: 'var(--green)', icon: '💰' },
-          { label: 'Premium invested', value: `₹${totalPremiumPaid.toLocaleString()}`, sub: '6 weeks × ₹'+premium, color: 'var(--accent)', icon: '📊' },
-          { label: 'Claims filed', value: MOCK_CLAIMS.length, sub: '100% auto-processed', color: 'var(--blue)', icon: '⚡' },
-          { label: 'Protection ratio', value: `${protectionRatio}%`, sub: 'return on premium', color: 'var(--purple)', icon: '🛡️' },
-        ].map(s => (
-          <div key={s.label} className="card-sm">
+          {
+            label: 'Income protected',
+            value: `Rs.${totalPaid.toLocaleString()}`,
+            sub: totalClaims > 0 ? 'lifetime claims paid' : 'no payouts triggered yet',
+            color: 'var(--green)',
+            meta: 'Payouts',
+          },
+          {
+            label: 'Premium invested',
+            value: `Rs.${totalPremiumPaid.toLocaleString()}`,
+            sub: `6 weeks x Rs.${premium}`,
+            color: 'var(--accent)',
+            meta: 'Premium',
+          },
+          {
+            label: 'Claims filed',
+            value: totalClaims,
+            sub: totalClaims > 0 ? 'auto-processed by backend' : 'waiting for first trigger',
+            color: 'var(--blue)',
+            meta: 'Claims',
+          },
+          {
+            label: 'Protection ratio',
+            value: `${protectionRatio}%`,
+            sub: 'return on premium',
+            color: 'var(--purple)',
+            meta: 'ROI',
+          },
+        ].map(stat => (
+          <div key={stat.label} className="card-sm">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
-                <div className="stat-label-sm">{s.label}</div>
-                <div className="stat-num" style={{ color: s.color, fontSize: 24 }}>{s.value}</div>
-                <div style={{ fontSize: 11, color: 'var(--text3)', marginTop: 4 }}>{s.sub}</div>
+                <div style={{ fontSize: 11, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>
+                  {stat.label}
+                </div>
+                <div className="stat-num" style={{ color: stat.color, fontSize: 24 }}>{stat.value}</div>
+                <div style={{ fontSize: 11, color: 'var(--text3)', marginTop: 4 }}>{stat.sub}</div>
               </div>
-              <span style={{ fontSize: 22 }}>{s.icon}</span>
+              <span style={{ fontSize: 11, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                {stat.meta}
+              </span>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Earnings chart */}
+      <div className="split-panel">
+        <div className="card simplify-hide">
+          <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>Today’s next steps</h3>
+          <p style={{ fontSize: 12, color: 'var(--text2)', marginBottom: 16 }}>
+            Plain-language guidance based on live conditions, recent payouts, and current backend signals.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {insights.length === 0 ? (
+              <div className="card-sm" style={{ background: 'var(--bg3)' }}>
+                No live recommendations yet. Simulate a disruption to see how the policy reacts.
+              </div>
+            ) : (
+              insights.map(insight => {
+                const tone = TONE_STYLES[insight.tone] || TONE_STYLES.neutral;
+                return (
+                  <div
+                    key={insight.id}
+                    className="card-sm"
+                    style={{ background: tone.background, borderColor: tone.borderColor }}
+                  >
+                    <div style={{ fontSize: 12, fontWeight: 600, color: tone.color, marginBottom: 4 }}>{insight.title}</div>
+                    <div style={{ fontSize: 13, color: 'var(--text2)' }}>{insight.detail}</div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        <div className="card simplify-hide">
+          <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>Zone Alerts</h3>
+          <p style={{ fontSize: 12, color: 'var(--text2)', marginBottom: 16 }}>
+            Clear notices affecting the policy right now.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {alerts.length === 0 ? (
+              <div className="card-sm" style={{ background: 'var(--bg3)' }}>No active alerts.</div>
+            ) : (
+              alerts.slice(0, 4).map(alert => {
+                const tone = TONE_STYLES[alert.severity] || TONE_STYLES.info;
+                return (
+                  <div key={alert.id} className="card-sm" style={{ background: tone.background, borderColor: tone.borderColor }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginBottom: 4 }}>
+                      <div style={{ fontWeight: 600, color: tone.color }}>{alert.title}</div>
+                      <div style={{ fontSize: 11, color: 'var(--text3)' }}>
+                        {new Date(alert.createdAt).toLocaleTimeString('en-IN')}
+                      </div>
+                    </div>
+                    <div style={{ fontSize: 13, color: 'var(--text2)' }}>{alert.message}</div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+      </div>
+
       <div className="card">
         <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Weekly Earnings + Protection</h3>
-        <p style={{ fontSize: 12, color: 'var(--text2)', marginBottom: 16 }}>Your actual income vs. claims paid out each week</p>
+        <p style={{ fontSize: 12, color: 'var(--text2)', marginBottom: 16 }}>
+          Projected weekly income versus the payouts now recorded by the backend
+        </p>
         <ResponsiveContainer width="100%" height={180}>
           <AreaChart data={earningsData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
             <defs>
@@ -92,57 +232,61 @@ export default function WorkerDashboard({ worker }) {
                 <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis dataKey="week" tick={{ fill: '#5a5855', fontSize: 12 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: '#5a5855', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={v => `₹${v}`} />
-            <Tooltip contentStyle={{ background: '#181b22', border: '1px solid #ffffff12', borderRadius: 8, fontSize: 12 }} formatter={(v, n) => [`₹${v}`, n === 'earned' ? 'Earnings' : 'Protected']} />
+            <XAxis dataKey="week" tick={{ fill: 'var(--text3)', fontSize: 12 }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fill: 'var(--text3)', fontSize: 11 }} axisLine={false} tickLine={false} tickFormatter={value => `Rs.${value}`} />
+            <Tooltip
+              contentStyle={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 8, fontSize: 12 }}
+              formatter={(value, name) => [`Rs.${value}`, name === 'earned' ? 'Projected earnings' : 'Protected amount']}
+            />
             <Area type="monotone" dataKey="earned" stroke="#f97316" strokeWidth={2} fill="url(#gEarned)" />
             <Area type="monotone" dataKey="protected" stroke="#22c55e" strokeWidth={2} fill="url(#gProtected)" />
           </AreaChart>
         </ResponsiveContainer>
-        <div style={{ display: 'flex', gap: 20, marginTop: 8 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text2)' }}>
-            <div style={{ width: 12, height: 3, background: 'var(--accent)', borderRadius: 2 }} /> Weekly earnings
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text2)' }}>
-            <div style={{ width: 12, height: 3, background: 'var(--green)', borderRadius: 2 }} /> Claims paid
-          </div>
-        </div>
       </div>
 
-      {/* Active week coverage */}
       <div className="card">
-        <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 14 }}>This Week's Coverage</h3>
+        <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 14 }}>This Week&apos;s Coverage</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {DISRUPTIONS.map(d => (
-            <div key={d.id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>{d.icon}</span>
-              <span style={{ fontSize: 13, flex: 1 }}>{d.name}</span>
+          {DISRUPTIONS.map(disruption => (
+            <div key={disruption.id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>{disruption.icon}</span>
+              <span style={{ fontSize: 13, flex: 1 }}>{disruption.name}</span>
               <div className="progress-track" style={{ flex: 2 }}>
-                <div className="progress-fill" style={{ width: `${Math.round(d.payout / maxDisruptionPayout * 100)}%`, background: d.color }} />
+                <div className="progress-fill" style={{ width: '100%', background: disruption.color }} />
               </div>
-              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 14, color: 'var(--accent)', minWidth: 60, textAlign: 'right' }}>₹{d.payout}/day</span>
+              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 14, color: 'var(--accent)', minWidth: 84, textAlign: 'right' }}>
+                Rs.{disruption.payout}/day
+              </span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Recent activity */}
       <div className="card">
         <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 14 }}>Recent Activity</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-          {[
-            { icon: '✓', text: 'Weekly premium ₹'+premium+' deducted', time: fmtShort(thisMonday), color: 'var(--text3)' },
-            { icon: '💰', text: 'Claim paid — Heavy rain · ₹500 to UPI', time: fmtShort(new Date(thisMonday.getTime() + 2 * 86400000)), color: 'var(--green)' },
-            { icon: '🔄', text: 'Policy renewed for current week', time: fmtShort(thisMonday), color: 'var(--blue)' },
-          ].map((a, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0', borderBottom: i < 2 ? '1px solid var(--border)' : 'none' }}>
-              <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--bg3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>{a.icon}</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 13, color: a.color }}>{a.text}</div>
+          {recentActivities.map((activity, index) => {
+            const tone = TONE_STYLES[activity.tone] || TONE_STYLES.neutral;
+            return (
+              <div
+                key={activity.id}
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 12,
+                  padding: '12px 0',
+                  borderBottom: index < recentActivities.length - 1 ? '1px solid var(--border)' : 'none',
+                }}
+              >
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: tone.color, marginTop: 8, flexShrink: 0 }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, color: 'var(--text)' }}>{activity.label}</div>
+                  <div style={{ fontSize: 12, color: 'var(--text3)', marginTop: 2 }}>{activity.detail}</div>
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--text3)', flexShrink: 0 }}>{activity.time}</div>
               </div>
-              <div style={{ fontSize: 12, color: 'var(--text3)', flexShrink: 0 }}>{a.time}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
