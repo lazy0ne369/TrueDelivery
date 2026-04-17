@@ -9,8 +9,8 @@ import {
   ZONES,
   calculatePremium,
   getRiskScore,
-} from '../src/data/mockData.js';
-import { DEFAULT_WORKER } from '../src/lib/appConfig.js';
+} from './data/mockData.js';
+import { DEFAULT_WORKER } from './lib/appConfig.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

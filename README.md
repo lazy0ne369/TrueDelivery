@@ -615,20 +615,21 @@ A genuine worker caught in a storm will experience the 🟡 hold as a minor dela
 
 | Name | Role | Institution |
 |:---|:---|:---|
-| *(Add name)* | *(Add role)* | *(Add institution)* |
-| *(Add name)* | *(Add role)* | *(Add institution)* |
-| *(Add name)* | *(Add role)* | *(Add institution)* |
+| *Sohan Kumar Sahu* | *Team Leader* |
+| *Abu Sufian Choudhury* | *Backend* | 
+| *Samarth V Ratnam* | *Backend* |
+| *T Deepak Kumar Patro* | *Frontend* |
+| *Salagrama Shanmukha Chintamani Sharma* | *Frontend* |
 
 ---
 
-## 🔗 Links
+## 🔗 Pitch Deck
 
 | Resource | Link |
 |:---|:---|
-| 🎥 Phase 1 Video | *(to be added)* |
-| 🌐 Live Demo | *(to be added)* |
-| 📊 Pitch Deck | *(to be added)* |
-| 🔗 GitHub Repository | *(this repo)* |
+| 🌐 Deployed Link | *https://true-delivery-frontend.vercel.app* |
+| 📊 Pitch Video | *https://drive.google.com/drive/folders/1yeAbwHa1GqDLBN3__cqnex91eQciRlng?usp=sharing* |
+| 🔗 GitHub Repository | *https://github.com/lazy0ne369/True-Delivery* |
 
 ---
 
